@@ -54,6 +54,7 @@ uint16_t mazeOffsetX = 0;
 uint16_t mazeOffsetY = 0;
 
 void drawHUD();
+void drawHUDContent();
 void drawMaze();
 void renderMazeTiles();
 void drawTile(uint8_t x, uint8_t y);
@@ -100,8 +101,8 @@ void setup() {
   display.firstPage();
   do {
     display.fillScreen(GxEPD_WHITE);
-    drawHUD();
-    drawMaze();
+    drawHUDContent();
+    renderMazeTiles();
     drawEnemy(enemy);
     drawPlayer(player);
   } while (display.nextPage());
@@ -142,18 +143,22 @@ void playBeep() {
   ledcWriteTone(0, 0);
 }
 
+void drawHUDContent() {
+  display.fillRect(0, 0, display.width(), HUD_HEIGHT, GxEPD_WHITE);
+  display.setFont(NULL);
+  display.setTextSize(1);
+  display.setCursor(4, 12);
+  display.print("L");
+  display.print(lives);
+  display.setCursor(display.width() - 40, 12);
+  display.print("DEMO");
+}
+
 void drawHUD() {
   display.setPartialWindow(0, 0, display.width(), HUD_HEIGHT);
   display.firstPage();
   do {
-    display.fillRect(0, 0, display.width(), HUD_HEIGHT, GxEPD_WHITE);
-    display.setFont(NULL);
-    display.setTextSize(1);
-    display.setCursor(4, 12);
-    display.print("L");
-    display.print(lives);
-    display.setCursor(display.width() - 40, 12);
-    display.print("DEMO");
+    drawHUDContent();
   } while (display.nextPage());
 }
 
