@@ -67,6 +67,11 @@ void playBeep();
 bool isWall(uint8_t x, uint8_t y);
 Entity randomEnemyMove(const Entity &current);
 
+bool prevUp = false;
+bool prevDown = false;
+bool prevLeft = false;
+bool prevRight = false;
+
 void setupOffsets() {
   mazeOffsetX = (display.width() - (MAZE_WIDTH * TILE_SIZE)) / 2;
   uint16_t availableHeight = display.height() - HUD_HEIGHT;
@@ -111,15 +116,25 @@ void setup() {
 void loop() {
   Entity oldPlayer = player;
 
-  if (digitalRead(BTN_UP) == LOW && player.y > 0 && !isWall(player.x, player.y - 1)) {
+  bool upPressed = digitalRead(BTN_UP) == LOW;
+  bool downPressed = digitalRead(BTN_DOWN) == LOW;
+  bool leftPressed = digitalRead(BTN_LEFT) == LOW;
+  bool rightPressed = digitalRead(BTN_RIGHT) == LOW;
+
+  if (upPressed && !prevUp && player.y > 0 && !isWall(player.x, player.y - 1)) {
     player.y -= 1;
-  } else if (digitalRead(BTN_DOWN) == LOW && player.y + 1 < MAZE_HEIGHT && !isWall(player.x, player.y + 1)) {
+  } else if (downPressed && !prevDown && player.y + 1 < MAZE_HEIGHT && !isWall(player.x, player.y + 1)) {
     player.y += 1;
-  } else if (digitalRead(BTN_LEFT) == LOW && player.x > 0 && !isWall(player.x - 1, player.y)) {
+  } else if (leftPressed && !prevLeft && player.x > 0 && !isWall(player.x - 1, player.y)) {
     player.x -= 1;
-  } else if (digitalRead(BTN_RIGHT) == LOW && player.x + 1 < MAZE_WIDTH && !isWall(player.x + 1, player.y)) {
+  } else if (rightPressed && !prevRight && player.x + 1 < MAZE_WIDTH && !isWall(player.x + 1, player.y)) {
     player.x += 1;
   }
+
+  prevUp = upPressed;
+  prevDown = downPressed;
+  prevLeft = leftPressed;
+  prevRight = rightPressed;
 
   if (player.x != oldPlayer.x || player.y != oldPlayer.y) {
     playBeep();
