@@ -89,7 +89,8 @@ void setup() {
   ledcAttachPin(SPEAKER_PIN, 0);
 
   display.init(115200, true, 2, false);
-  display.setRotation(1);
+  // Reverse portrait orientation
+  display.setRotation(2);
   display.setTextColor(GxEPD_BLACK);
   setupOffsets();
 
